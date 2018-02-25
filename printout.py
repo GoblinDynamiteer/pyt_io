@@ -24,6 +24,9 @@ class color:
 def print_warning(string, endl=True):
     print_color(string, "yellow", endl=endl, light=True)
 
+def print_success(string, endl=True):
+    print_color(string, "green", endl=endl, light=True)
+
 def print_error(string, endl=True):
     print_color(string, "red", endl=endl, light=True)
 
