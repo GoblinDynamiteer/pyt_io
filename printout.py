@@ -47,6 +47,20 @@ def print_color(string, color_string, endl=True, light=True):
     else:
         print_no_line(s)
 
+def print_color_between(string, color_string, char_begin='[', char_end = ']', endl=True, light=True):
+    c = color()
+    start = string.find(char_begin) + 1
+    end = string.find(char_end)
+
+    color_string = "{}{}{}".format(c.set(color_string, light=light), string[start:end], c.end())
+    print_no_line(string[0:start])
+    print_no_line(color_string)
+
+    if endl:
+        print(string[end:])
+    else:
+        print_no_line(string[end:])
+
 def print_no_line(string):
     print(string, end='')
 
@@ -56,3 +70,5 @@ def test():
     print_blue("This is a print_blue!")
     print_cyan("This is a print_cyan!")
     print_magenta("This is a print_magenta!")
+    print_color_between("I want colors [BETWEEN] here", "red")
+    print_color_between("I want colors ( BETWEEN * here", "yellow", char_begin='(', char_end='*')
