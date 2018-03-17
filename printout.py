@@ -64,6 +64,12 @@ def print_color_between(string, color_string, char_begin='[', char_end = ']', en
 def print_no_line(string):
     print(string, end='')
 
+def print_script_name(script_file_name, string, endl=True):
+    end_line = False
+    if endl:
+        end_line = True
+    print_color_between("[ {} ] : {}".format(script_file_name, string), "green", endl=end_line)
+
 def test():
     print_warning("This is a warning!")
     print_error("This is an error!")

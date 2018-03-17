@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import sys
+import sys, printout
 
-def yes_no(question, default="yes"):
+def yes_no(question, default="yes", script_name=None):
     valid = {"yes": True, "y": True, "no": False, "n": False}
     if default is None:
         prompt = " [y/n] "
@@ -15,6 +15,8 @@ def yes_no(question, default="yes"):
         quit()
 
     while True:
+        if script_name:
+            printout.print_script_name(script_name, "", endl=False)
         sys.stdout.write("{} {}".format(question, prompt))
         choice = input().lower()
         if default is not None and choice is '':
