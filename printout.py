@@ -1,80 +1,96 @@
 # -*- coding: utf-8 -*-
 import platform
 
-class color:
-    color_code = {
-        'black' : 30, 'red' : 31, 'green' : 32,
-        'yellow' : 33, 'blue' : 34, 'magenta' : 35,
-        'cyan' : 36 }
-    special_code = { 'end' : 0}
+class print_class:
+    def __init__(self, script_name):
+        self.script_file_name = script_name
+        self.color = {
+            'black' : 30, 'red' : 31, 'green' : 32,
+            'yellow' : 33, 'blue' : 34, 'magenta' : 35,
+            'cyan' : 36 }
+        self.color_end_color = { 'end' : 0}
+        self.default_color = {
+            "script_name" : "green",
+            "info_brackets" : "blue",
+            "warning_brackets" : "yellow",
+            "error_brackets" : "red" }
 
-    def end(self):
+    def info(self, string, end_line=True):
+        self.__print_script_name()
+        if string.find('[') >= 0 and string.find(']') > 0:
+            self.__print_color_between(string,
+                self.default_color['info_brackets'])
+        else:
+            self.__print_no_line(string)
+        if end_line:
+            print("")
+
+    def warning(self, string, end_line=True):
+        self.__print_script_name()
+        self.__print_with_color("WARNING ", "yellow")
+        if string.find('[') >= 0 and string.find(']') > 0:
+            self.__print_color_between(string,
+                self.default_color['warning_brackets'])
+        else:
+            self.__print_no_line(string)
+        if end_line:
+            print("")
+
+    def error(self, string, end_line=True):
+        self.__print_script_name()
+        self.__print_with_color("ERROR ", "red")
+        if string.find('[') >= 0 and string.find(']') > 0:
+            self.__print_color_between(string,
+                self.default_color['error_brackets'])
+        else:
+            self.__print_no_line(string)
+        if end_line:
+            print("")
+
+    def output(self, string, end_line=True):
+        self.__print_no_line(string)
+        if end_line:
+            print("")
+
+    def color_print(self, string, foreground, end_line=True, background=None, light=True):
+        self.__print_with_color(string, foreground, background, light)
+        if end_line:
+            print("")
+
+    def color_brackets(self, string, foreground, background=None, end_line=True):
+        self.__print_color_between(string, foreground, background)
+        if end_line:
+            print("")
+
+    def __print_with_color(self, string, foreground, background=None, light=True):
+        self.__set_color(foreground, background, light)
+        self.__print_no_line(string)
+        self.__color_off()
+
+    def __print_color_between(self, string, foreground, background=None,
+        char_begin='[', char_end = ']', light=True):
+        start_index = string.find(char_begin) + 1
+        end_index = string.find(char_end)
+        self.__print_no_line(string[0:start_index])
+        self.__print_with_color(string[start_index:end_index], foreground)
+        self.__print_no_line(string[end_index:])
+
+    def __print_script_name(self):
+        self.__print_color_between("[ {} ] ".format(self.script_file_name),
+            self.default_color['script_name'])
+
+    def __print_no_line(self, string):
+        print(string, end='')
+
+    def __set_color(self, foreground, background, light=True):
         if platform.system() == 'Windows':
             return ""
-        return "\033[{}m".format(self.special_code['end'])
-
-    def set(self, color_fg, light=True, color_bg = None):
-        if platform.system() == 'Windows':
-            return ""
-        fg = self.color_code[color_fg]
+        fg = self.color[foreground]
         if light:
             fg += 60
-        return "\033[{}m".format(fg)
+        self.__print_no_line("\033[{}m".format(fg))
 
-def print_warning(string, endl=True):
-    print_color(string, "yellow", endl=endl, light=True)
-
-def print_success(string, endl=True):
-    print_color(string, "green", endl=endl, light=True)
-
-def print_error(string, endl=True):
-    print_color(string, "red", endl=endl, light=True)
-
-def print_blue(string, endl=True, light=True):
-    print_color(string, "blue", endl=endl, light=light)
-
-def print_cyan(string, endl=True, light=True):
-    print_color(string, "cyan", endl=endl, light=light)
-
-def print_magenta(string, endl=True, light=True):
-    print_color(string, "magenta", endl=endl, light=light)
-
-def print_color(string, color_string, endl=True, light=True):
-    c = color()
-    s = "{}{}{}".format(c.set(color_string, light=light), string, c.end())
-    if endl:
-        print(s)
-    else:
-        print_no_line(s)
-
-def print_color_between(string, color_string, char_begin='[', char_end = ']', endl=True, light=True):
-    c = color()
-    start = string.find(char_begin) + 1
-    end = string.find(char_end)
-
-    color_string = "{}{}{}".format(c.set(color_string, light=light), string[start:end], c.end())
-    print_no_line(string[0:start])
-    print_no_line(color_string)
-
-    if endl:
-        print(string[end:])
-    else:
-        print_no_line(string[end:])
-
-def print_no_line(string):
-    print(string, end='')
-
-def print_script_name(script_file_name, string, endl=True):
-    end_line = False
-    if endl:
-        end_line = True
-    print_color_between("[ {} ] {}".format(script_file_name, string), "green", endl=end_line)
-
-def test():
-    print_warning("This is a warning!")
-    print_error("This is an error!")
-    print_blue("This is a print_blue!")
-    print_cyan("This is a print_cyan!")
-    print_magenta("This is a print_magenta!")
-    print_color_between("I want colors [BETWEEN] here", "red")
-    print_color_between("I want colors ( BETWEEN * here", "yellow", char_begin='(', char_end='*')
+    def __color_off(self):
+        if platform.system() == 'Windows':
+            return ""
+        self.__print_no_line("\033[{}m".format(self.color_end_color['end']))
