@@ -13,7 +13,8 @@ class print_class:
             "script_name" : "green",
             "info_brackets" : "blue",
             "warning_brackets" : "yellow",
-            "error_brackets" : "red" }
+            "error_brackets" : "red",
+            "success_brackets" : "green" }
 
     def info(self, string, end_line=True):
         self.__print_script_name()
@@ -31,6 +32,17 @@ class print_class:
         if string.find('[') >= 0 and string.find(']') > 0:
             self.__print_color_between(string,
                 self.default_color['warning_brackets'])
+        else:
+            self.__print_no_line(string)
+        if end_line:
+            print("")
+
+    def success(self, string, end_line=True):
+        self.__print_script_name()
+        self.__print_with_color("SUCCESS ", "green")
+        if string.find('[') >= 0 and string.find(']') > 0:
+            self.__print_color_between(string,
+                self.default_color['success_brackets'])
         else:
             self.__print_no_line(string)
         if end_line:
