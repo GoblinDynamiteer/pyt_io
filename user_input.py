@@ -28,3 +28,16 @@ def yes_no(question, default="yes", script_name=None):
             return valid[choice]
         else:
             pr2.error("Enter Yes/No!")
+
+def get_string(display_text, script_name=None, allow_empty=False):
+    while True:
+        if script_name:
+            pr2 = pr(script_name)
+        else:
+            pr2 = pr(os.path.basename(__file__))
+        pr2.info("{}: ".format(display_text), end_line=False)
+        user_input = input()
+        if not allow_empty and user_input == "":
+            pr2.error("empty strings not allowed! try again!")
+        else:
+            return user_input
