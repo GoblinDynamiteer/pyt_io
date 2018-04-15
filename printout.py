@@ -16,11 +16,14 @@ class print_class:
             "error_brackets" : "red",
             "success_brackets" : "green" }
 
-    def info(self, string, end_line=True):
+    def info(self, string, end_line=True, brackets_color = None):
         self.__print_script_name()
         if string.find('[') >= 0 and string.find(']') > 0:
-            self.__print_color_between(string,
-                self.default_color['info_brackets'])
+            if not brackets_color:
+                self.__print_color_between(string,
+                    self.default_color['info_brackets'])
+            else:
+                self.__print_color_between(string, brackets_color)
         else:
             self.__print_no_line(string)
         if end_line:
