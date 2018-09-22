@@ -1,8 +1,13 @@
-# -*- coding: utf-8 -*-
-import sys, printout, os
-from printout import print_class as pr
+#!/usr/bin/env python3.6
 
-pr1 = pr(os.path.basename(__file__))
+'''String input'''
+
+import sys
+import os
+import str_o
+
+PRINT = str_o.PrintClass(os.path.basename(__file__))
+
 
 def yes_no(question, default="yes", script_name=None):
     valid = {"yes": True, "y": True, "no": False, "n": False}
@@ -13,31 +18,32 @@ def yes_no(question, default="yes", script_name=None):
     elif default == "no":
         prompt = " [y/N] "
     else:
-        pr1.error("wrong default")
+        PRINT.error("wrong default")
         quit()
+    if script_name:
+        print_class = str_o.PrintClass(script_name)
+    else:
+        print_class = PRINT
     while True:
-        if script_name:
-            pr2 = pr(script_name)
-        else:
-            pr2 = pr(os.path.basename(__file__))
-        pr2.info("{} {}".format(question, prompt), end_line=False)
+        print_class.info("{} {}".format(question, prompt), end_line=False)
         choice = input().lower()
         if default is not None and choice is '':
             return valid[default]
         elif choice in valid:
             return valid[choice]
         else:
-            pr2.error("Enter Yes/No!")
+            print_class.error("Enter Yes/No!")
+
 
 def get_string(display_text, script_name=None, allow_empty=False):
+    if script_name:
+        print_class = str_o.PrintClass(script_name)
+    else:
+        print_class = PRINT
     while True:
-        if script_name:
-            pr2 = pr(script_name)
-        else:
-            pr2 = pr(os.path.basename(__file__))
-        pr2.info("{}: ".format(display_text), end_line=False)
+        print_class.info("{}: ".format(display_text), end_line=False)
         user_input = input()
         if not allow_empty and user_input == "":
-            pr2.error("empty strings not allowed! try again!")
+            print_class.error("empty strings not allowed! try again!")
         else:
             return user_input
