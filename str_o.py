@@ -1,28 +1,32 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3.6
+
+'''String output'''
+
 import platform
 
-class print_class:
+
+class PrintClass:
     def __init__(self, script_name):
         self.script_file_name = script_name
         self.color = {
-            'black' : 30, 'red' : 31, 'green' : 32,
-            'yellow' : 33, 'blue' : 34, 'magenta' : 35,
-            'cyan' : 36 }
-        self.color_end_color = { 'end' : 0}
+            'black': 30, 'red': 31, 'green': 32,
+            'yellow': 33, 'blue': 34, 'magenta': 35,
+            'cyan': 36}
+        self.color_end_color = {'end': 0}
         self.default_color = {
-            "script_name" : "green",
-            "info_brackets" : "blue",
-            "warning_brackets" : "yellow",
-            "error_brackets" : "red",
-            "success_brackets" : "green" }
+            "script_name": "green",
+            "info_brackets": "blue",
+            "warning_brackets": "yellow",
+            "error_brackets": "red",
+            "success_brackets": "green"}
 
-    def info(self, string, end_line=True, brackets_color = None, print_script_name = True):
+    def info(self, string, end_line=True, brackets_color=None, print_script_name=True):
         if print_script_name:
             self.__print_script_name()
         if string.find('[') >= 0 and string.find(']') > 0:
             if not brackets_color:
                 self.__print_color_between(string,
-                    self.default_color['info_brackets'])
+                                           self.default_color['info_brackets'])
             else:
                 self.__print_color_between(string, brackets_color)
         else:
@@ -35,7 +39,7 @@ class print_class:
         self.__print_with_color("WARNING ", "yellow")
         if string.find('[') >= 0 and string.find(']') > 0:
             self.__print_color_between(string,
-                self.default_color['warning_brackets'])
+                                       self.default_color['warning_brackets'])
         else:
             self.__print_no_line(string)
         if end_line:
@@ -46,7 +50,7 @@ class print_class:
         self.__print_with_color("SUCCESS ", "green")
         if string.find('[') >= 0 and string.find(']') > 0:
             self.__print_color_between(string,
-                self.default_color['success_brackets'])
+                                       self.default_color['success_brackets'])
         else:
             self.__print_no_line(string)
         if end_line:
@@ -57,7 +61,7 @@ class print_class:
         self.__print_with_color("ERROR ", "red")
         if string.find('[') >= 0 and string.find(']') > 0:
             self.__print_color_between(string,
-                self.default_color['error_brackets'])
+                                       self.default_color['error_brackets'])
         else:
             self.__print_no_line(string)
         if end_line:
@@ -84,7 +88,7 @@ class print_class:
         self.__color_off()
 
     def __print_color_between(self, string, foreground, background=None,
-        char_begin='[', char_end = ']', light=True):
+                              char_begin='[', char_end=']', light=True):
         start_index = string.find(char_begin) + 1
         end_index = string.find(char_end)
         self.__print_no_line(string[0:start_index])
@@ -93,7 +97,7 @@ class print_class:
 
     def __print_script_name(self):
         self.__print_color_between("[ {} ] ".format(self.script_file_name),
-            self.default_color['script_name'])
+                                   self.default_color['script_name'])
 
     def __print_no_line(self, string):
         print(string, end='')
